@@ -1,0 +1,19 @@
+{
+  "name": "fleader",
+  "version": "0.1.0",
+  "description": "A monad transformer between reader and fluture. Please use with caution...",
+  "main": "/src/fleader.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "type": "module",
+  "author": "Martin Chan",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.3.4",
+    "mocha": "^8.3.2"
+  },
+  "dependencies": {
+    "fluture": "^14.0.0"
+  }
+}
