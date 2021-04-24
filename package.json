@@ -1,6 +1,6 @@
 {
   "name": "fleader",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "A monad transformer between reader and fluture. Please use with caution...",
   "main": "src/fleader.js",
   "scripts": {

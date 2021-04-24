@@ -1,4 +1,13 @@
-const Future = require('fluture')
+const { Future, pap, map, chain, resolve } = require('fluture')
+
+const curryAssoc = (key) => (value) => (obj) => {
+  obj[key] = value
+  return obj
+}
+
+const futureAssoc = (key, value, obj) => {
+  return pap(obj)(pap(value)(pap(key)(resolve(curryAssoc))))
+}
 
 function transform (M) {
   class ReaderT {
@@ -11,15 +20,18 @@ function transform (M) {
     }
 
     map (g) {
-      const reader = this
       return new ReaderT(e =>
-        this.run(e)['fantasy-land/map'](a => g(a)))
+        map(a => g(a))(this.run(e)))
     }
 
     chain (g) {
-      const reader = this
       return new ReaderT(e =>
-        this.run(e)['fantasy-land/chain'](a => g(a).run(e)))
+        chain(a => g(a).run(e))((this.run(e))))
+    }
+
+    ap (f) {
+      return new ReaderT(e =>
+        pap(this.run(e))(f.run(e)))
     }
   }
 
@@ -28,6 +40,14 @@ function transform (M) {
   ReaderT.ask = new ReaderT(e => M['fantasy-land/of'](e))
 
   ReaderT.lift = (m) => new ReaderT(b => m)
+
+  ReaderT.props = (obj) => {
+    return new ReaderT(e => 
+      Object.keys(obj).reduce((acc, key) => {
+        return futureAssoc(resolve(key), obj[key].run(e), acc)
+      }, resolve({}))
+    )
+  }
 
   return ReaderT
 }

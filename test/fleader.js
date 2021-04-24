@@ -62,5 +62,34 @@ describe('Fleader', () => {
           (result => result.should.be.equal('The last value is 37')))
     })
   })
+
+  describe('ap', () => {
+    const value = Fleader.of(0)
+    const add37 = Fleader.of((a) => (a + 37))
+    it('ap', () => {
+      const wrappedValue = value.ap(add37)
+      wrappedValue.run({})
+        .pipe(fork(
+          (err) => {throw err})
+          (result => result.should.be.equal(37)))
+    })
+  })
+
+  describe('props', () => {
+    const fleaderObj = {
+      a: Fleader.of('This is a fleader'),
+      b: Fleader.of(37)
+    }
+    it('props', () => {
+      const wrappedValue = Fleader.props(fleaderObj)
+      wrappedValue.run({})
+        .pipe(fork(
+          (err) => {throw err})
+          (result => result.should.be.deep.equal({
+            a: 'This is a fleader',
+            b: 37
+          })))
+    })
+  })
 })
 
