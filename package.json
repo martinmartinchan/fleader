@@ -6,7 +6,6 @@
   "scripts": {
     "test": "mocha"
   },
-  "type": "module",
   "author": "Martin Chan",
   "license": "MIT",
   "devDependencies": {
