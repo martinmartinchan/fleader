@@ -1,4 +1,4 @@
-const { Future, pap, map, chain, resolve } = require('fluture')
+const { Future, pap, map, chain, resolve, parallel } = require('fluture')
 
 const curryAssoc = (key) => (value) => (obj) => {
   obj[key] = value
@@ -46,6 +46,12 @@ function transform (M) {
       Object.keys(obj).reduce((acc, key) => {
         return futureAssoc(resolve(key), obj[key].run(e), acc)
       }, resolve({}))
+    )
+  }
+
+  ReaderT.all = (fleaders) => {
+    return new ReaderT(e =>
+      parallel(Infinity)(fleaders.map(f => f.run(e)))  
     )
   }
 

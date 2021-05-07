@@ -91,5 +91,19 @@ describe('Fleader', () => {
           })))
     })
   })
+
+  describe('all', () => {
+    const fleaderArray = [
+      Fleader.of(0),
+      Fleader.of(37)
+    ]
+    it('all', () => {
+      const wrappedValue = Fleader.all(fleaderArray)
+      wrappedValue.run({})
+        .pipe(fork(
+          (err) => {throw err})
+          (result => result.should.be.deep.equal([0, 37])))
+    })
+  })
 })
 
